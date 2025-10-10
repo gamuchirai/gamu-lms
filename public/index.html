@@ -12,7 +12,7 @@
         <h1>Welcome to Jupiter LMS</h1>
     </header>
     <main>
-        <form action="/register.php" method="POST" class="register-form">
+        <form action="register.php" method="POST" class="register-form">
             <div class="form-group">
                 <label for="firstname">First Name:</label>
                 <input type="text" id="firstname" name="firstname" required>
@@ -29,8 +29,21 @@
                 <label for="password">Create Password:</label>
                 <input type="password" id="password" name="password" required>
              </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
             <button type="submit">Register</button>
-            <p>Already have an account? <a href="/login.html">Login here</a></p>
+            <p>Already have an account? <a href="login.html">Login here</a></p>
             </form>
             
     </main>
