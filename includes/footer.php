@@ -1,5 +1,5 @@
     <footer>
-        <p>&copy; 2023 Jupiter LMS</p>
+        <p>&copy; <?php echo date('Y'); ?> Jupiter LMS</p>
     </footer>
 </body>
 </html>
