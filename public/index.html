@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
     <title>Register - Jupiter LMS</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=2.0">
+    <link rel="stylesheet" href="../assets/css/style.css?v=4.0">
 </head>
 <body>
     <header>
@@ -13,39 +13,44 @@
     </header>
     <main>
         <form action="register.php" method="POST" class="register-form">
-            <div class="form-group">
-                <label for="firstname">First Name:</label>
-                <input type="text" id="firstname" name="firstname" required>
-            </div>
+            <div class="form-row">
                 <div class="form-group">
-                <label for="lastname">Last Name:</label>
-                <input type="text" id="lastname" name="lastname" required>
+                    <label for="firstname">First Name:</label>
+                    <input type="text" id="firstname" name="firstname" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Last Name:</label>
+                    <input type="text" id="lastname" name="lastname" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">    
+                    <label for="password">Create Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
             </div>
-            <div class="form-group">    
-                <label for="password">Create Password:</label>
-                <input type="password" id="password" name="password" required>
-             </div>
-            <div class="form-group">
-                <label for="gender">Gender:</label>
-                <select id="gender" name="gender" required>
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="dob">Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
             </div>
             <button type="submit">Register</button>
             <p>Already have an account? <a href="login.html">Login here</a></p>
-            </form>
-            
+        </form>
     </main>
     <footer>
         <p>&copy; 2023 Jupiter LMS</p>
