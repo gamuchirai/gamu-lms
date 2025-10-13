@@ -18,12 +18,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: dashboard.php");
             exit();
         } else {
-            echo "<script>alert('Invalid email or password'); window.location.href = 'login.php';</script>";
+            echo "<script>alert('Invalid password'); window.location.href = 'login.html';</script>";
         }
     } else {
-        echo "<script>alert('Invalid email or password'); window.location.href = 'login.php';</script>";
+        echo "<script>alert('Invalid email'); window.location.href = 'login.html';</script>";
     }
 } else {
-    echo "<script>alert('Email not registered'); window.location.href = 'login.php';</script>";
+    echo "<script>alert('Form not submitted'); window.location.href = 'login.html';</script>";
 }
 ?>
