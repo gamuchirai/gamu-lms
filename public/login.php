@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['loggedin'] = true;
             header("Location: dashboard.php");
             exit();
+        } else {
+            echo "<script>alert('Invalid email or password'); window.location.href = 'login.php';</script>";
         }
     } else {
         echo "<script>alert('Invalid email or password'); window.location.href = 'login.php';</script>";

@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES ('$firstname', '$lastname', '$email', '$password', '$gender', '$dob')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "<script>alert('Registration successful!'); window.location.href = 'login.php';</script>";
+        echo "<script>alert('Registration successful!'); window.location.href = 'login.html';</script>";
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
