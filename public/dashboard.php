@@ -1,5 +1,61 @@
 <?php include '../includes/session_guard.php'; ?>
 <?php include '../includes/header.php'; ?>
+<?php
+// Fetch stats and upcoming tasks for the logged-in student
+require_once '../config/db_config.php';
+
+$student_id = $_SESSION['student_id'];
+
+// Get stats for lessons
+$sql_lessons = "SELECT 
+                COUNT(*) as total,
+                SUM(completed) as completed
+                FROM student_tasks 
+                WHERE student_id = ? AND task_type = 'lesson'";
+$stmt = $conn->prepare($sql_lessons);
+$stmt->bind_param("i", $student_id);
+$stmt->execute();
+$lessons_stats = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+// Get stats for assignments
+$sql_assignments = "SELECT 
+                    COUNT(*) as total,
+                    SUM(completed) as completed
+                    FROM student_tasks 
+                    WHERE student_id = ? AND task_type = 'assignment'";
+$stmt = $conn->prepare($sql_assignments);
+$stmt->bind_param("i", $student_id);
+$stmt->execute();
+$assignments_stats = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+// Get stats for tests
+$sql_tests = "SELECT 
+              COUNT(*) as total,
+              SUM(completed) as completed
+              FROM student_tasks 
+              WHERE student_id = ? AND task_type = 'test'";
+$stmt = $conn->prepare($sql_tests);
+$stmt->bind_param("i", $student_id);
+$stmt->execute();
+$tests_stats = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+// Fetch upcoming tasks (not completed and due today or later)
+$sql = "SELECT id, title, due_date, task_type, completed 
+        FROM student_tasks 
+        WHERE student_id = ? AND due_date >= CURDATE() AND completed = 0
+        ORDER BY due_date ASC 
+        LIMIT 4";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $student_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$upcoming_tasks = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+?>
     <div class="dashboard-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar">
@@ -54,21 +110,21 @@
                     <div class="stats-cards">
                         <div class="stat-card lessons">
                             <div class="stat-icon"><i class="fas fa-book"></i></div>
-                            <div class="stat-number">42</div>
+                            <div class="stat-number"><?php echo $lessons_stats['completed'] ?? 0; ?></div>
                             <div class="stat-label">Lessons</div>
-                            <div class="stat-subtitle">of 71 completed</div>
+                            <div class="stat-subtitle">of <?php echo $lessons_stats['total'] ?? 0; ?> completed</div>
                         </div>
                         <div class="stat-card assignments">
                             <div class="stat-icon"><i class="fas fa-tasks"></i></div>
-                            <div class="stat-number">08</div>
+                            <div class="stat-number"><?php echo str_pad($assignments_stats['completed'] ?? 0, 2, '0', STR_PAD_LEFT); ?></div>
                             <div class="stat-label">Assignments</div>
-                            <div class="stat-subtitle">of 24 completed</div>
+                            <div class="stat-subtitle">of <?php echo $assignments_stats['total'] ?? 0; ?> completed</div>
                         </div>
                         <div class="stat-card tests">
                             <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                            <div class="stat-number">03</div>
+                            <div class="stat-number"><?php echo str_pad($tests_stats['completed'] ?? 0, 2, '0', STR_PAD_LEFT); ?></div>
                             <div class="stat-label">Tests</div>
-                            <div class="stat-subtitle">of 15 completed</div>
+                            <div class="stat-subtitle">of <?php echo $tests_stats['total'] ?? 0; ?> completed</div>
                         </div>
                     </div>
 
@@ -135,26 +191,53 @@
                     <div class="upcoming-section">
                         <h3 class="upcoming-title">Upcoming</h3>
                         <div class="upcoming-list">
-                            <div class="upcoming-item">
-                                <div class="upcoming-date">29 Sept</div>
-                                <div class="upcoming-name">Practical theory</div>
-                                <span class="upcoming-tag">Assignments</span>
-                            </div>
-                            <div class="upcoming-item">
-                                <div class="upcoming-date">29 Sept</div>
-                                <div class="upcoming-name">Practical theory I</div>
-                                <span class="upcoming-tag test">Test</span>
-                            </div>
-                            <div class="upcoming-item">
-                                <div class="upcoming-date">29 Sept</div>
-                                <div class="upcoming-name">Practical theory 2</div>
-                                <span class="upcoming-tag">Assignments</span>
-                            </div>
-                            <div class="upcoming-item">
-                                <div class="upcoming-date">29 Sept</div>
-                                <div class="upcoming-name">Practical theory 3</div>
-                                <span class="upcoming-tag">Assignments</span>
-                            </div>
+                            <?php if (count($upcoming_tasks) > 0): ?>
+                                <?php foreach ($upcoming_tasks as $task): ?>
+                                    <?php
+                                    // Format the date (e.g., "29 Sept")
+                                    $date = new DateTime($task['due_date']);
+                                    $formatted_date = $date->format('d M');
+                                    
+                                    // Determine the CSS class and label for the tag
+                                    $tag_class = '';
+                                    $tag_label = '';
+                                    
+                                    switch($task['task_type']) {
+                                        case 'lesson':
+                                            $tag_class = 'lesson';
+                                            $tag_label = 'Lesson';
+                                            break;
+                                        case 'test':
+                                            $tag_class = 'test';
+                                            $tag_label = 'Test';
+                                            break;
+                                        case 'assignment':
+                                        default:
+                                            $tag_class = '';
+                                            $tag_label = 'Assignment';
+                                            break;
+                                    }
+                                    ?>
+                                    <div class="upcoming-item" data-task-id="<?php echo $task['id']; ?>">
+                                        <div class="upcoming-checkbox">
+                                            <input type="checkbox" 
+                                                   id="task-<?php echo $task['id']; ?>" 
+                                                   class="task-checkbox"
+                                                   data-task-id="<?php echo $task['id']; ?>"
+                                                   <?php echo $task['completed'] ? 'checked' : ''; ?>>
+                                        </div>
+                                        <div class="upcoming-content">
+                                            <div class="upcoming-date"><?php echo $formatted_date; ?></div>
+                                            <div class="upcoming-name"><?php echo htmlspecialchars($task['title']); ?></div>
+                                            <span class="upcoming-tag <?php echo $tag_class; ?>"><?php echo $tag_label; ?></span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <div class="upcoming-item">
+                                    <div class="upcoming-name">No upcoming tasks</div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -206,5 +289,77 @@
             </div>
         </main>
     </div>
+
+    <script>
+        // Handle task completion checkbox
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskId = this.getAttribute('data-task-id');
+                    const completed = this.checked ? 1 : 0;
+                    
+                    // Send AJAX request to update task
+                    fetch('update_task.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `task_id=${taskId}&completed=${completed}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the stat cards with new data
+                            if (data.stats) {
+                                // Update lessons
+                                const lessonsCard = document.querySelector('.stat-card.lessons');
+                                lessonsCard.querySelector('.stat-number').textContent = data.stats.lessons.completed;
+                                lessonsCard.querySelector('.stat-subtitle').textContent = `of ${data.stats.lessons.total} completed`;
+                                
+                                // Update assignments
+                                const assignmentsCard = document.querySelector('.stat-card.assignments');
+                                const assignmentsCompleted = String(data.stats.assignments.completed).padStart(2, '0');
+                                assignmentsCard.querySelector('.stat-number').textContent = assignmentsCompleted;
+                                assignmentsCard.querySelector('.stat-subtitle').textContent = `of ${data.stats.assignments.total} completed`;
+                                
+                                // Update tests
+                                const testsCard = document.querySelector('.stat-card.tests');
+                                const testsCompleted = String(data.stats.tests.completed).padStart(2, '0');
+                                testsCard.querySelector('.stat-number').textContent = testsCompleted;
+                                testsCard.querySelector('.stat-subtitle').textContent = `of ${data.stats.tests.total} completed`;
+                            }
+                            
+                            // Optional: Remove the item from upcoming list if checked
+                            if (completed === 1) {
+                                const taskItem = this.closest('.upcoming-item');
+                                taskItem.style.opacity = '0.5';
+                                setTimeout(() => {
+                                    taskItem.remove();
+                                    // Check if no more tasks
+                                    const remainingTasks = document.querySelectorAll('.upcoming-item').length;
+                                    if (remainingTasks === 0) {
+                                        const upcomingList = document.querySelector('.upcoming-list');
+                                        upcomingList.innerHTML = '<div class="upcoming-item"><div class="upcoming-name">No upcoming tasks</div></div>';
+                                    }
+                                }, 500);
+                            }
+                        } else {
+                            alert('Failed to update task: ' + data.message);
+                            // Revert checkbox state
+                            this.checked = !this.checked;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while updating the task');
+                        // Revert checkbox state
+                        this.checked = !this.checked;
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
