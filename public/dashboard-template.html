@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #e0f2f7 0%, #d4e8f0 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+            padding: 1.5rem;
+            gap: 1.5rem;
+        }
+
+        /* ==================== SIDEBAR ==================== */
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 1.5rem;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .sidebar-logo i {
+            font-size: 1.5rem;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar nav ul li a {
+            color: #666;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background: linear-gradient(135deg, #5D215F 0%, #7a2e78 100%);
+            color: #fff;
+        }
+
+        .sidebar nav ul li a i {
+            font-size: 1.2rem;
+            width: 1.5rem;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #e5e5e5;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* ==================== MAIN CONTENT ==================== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background: #fff;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: 1.5rem;
+            z-index: 100;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .topbar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 12px;
+            padding: 0.75rem 1.25rem;
+            gap: 0.75rem;
+            min-width: 300px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            background: #fff;
+            box-shadow: 0 0 0 2px #5D215F;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            flex: 1;
+        }
+
+        .search-bar input::placeholder {
+            color: #999;
+        }
+
+        .search-bar i {
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .topbar-icons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .topbar-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: #666;
+        }
+
+        .topbar-icon:hover {
+            background: #efefef;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-left: 1rem;
+            border-left: 1px solid #e5e5e5;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #5D215F 0%, #FF5E0F 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 0.95rem;
+        }
+
+        /* ==================== CONTENT GRID ==================== */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+        }
+
+        /* ==================== STATS CARDS ==================== */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-top: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .stat-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid;
+            top: 0;
+            left: 0;
+        }
+
+        .stat-card.lessons .stat-icon {
+            background: rgba(255, 159, 64, 0.15);
+            color: #FF9F40;
+        }
+
+        .stat-card.lessons .stat-icon::after {
+            border-color: #FFB366;
+        }
+
+        .stat-card.assignments .stat-icon {
+            background: rgba(232, 57, 70, 0.15);
+            color: #E83946;
+        }
+
+        .stat-card.assignments .stat-icon::after {
+            border-color: #FF7F8F;
+        }
+
+        .stat-card.tests .stat-icon {
+            background: rgba(93, 33, 95, 0.15);
+            color: #5D215F;
+        }
+
+        .stat-card.tests .stat-icon::after {
+            border-color: #A64BA6;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-subtitle {
+            font-size: 0.85rem;
+            color: #FF9F40;
+        }
+
+        .stat-card.assignments .stat-subtitle {
+            color: #E83946;
+        }
+
+        .stat-card.tests .stat-subtitle {
+            color: #5D215F;
+        }
+
+        /* ==================== SECTIONS ==================== */
+        .section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            margin-top: 1rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .section-tabs {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e5e5;
+            padding-bottom: 1rem;
+        }
+
+        .section-tab {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border-bottom: 3px solid transparent;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-tab.active {
+            color: #5D215F;
+            border-bottom-color: #5D215F;
+        }
+
+        /* ==================== COURSES TABLE ==================== */
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .course-item {
+            display: grid;
+            grid-template-columns: 50px 1fr auto auto auto;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .course-item:hover {
+            background: #f0f0f0;
+            transform: translateX(2px);
+        }
+
+        .course-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .course-icon.design {
+            background: linear-gradient(135deg, #FF5E0F 0%, #FF9F40 100%);
+            color: #fff;
+        }
+
+        .course-icon.html {
+            background: linear-gradient(135deg, #FF9F40 0%, #FFB366 100%);
+            color: #fff;
+        }
+
+        .course-icon.python {
+            background: linear-gradient(135deg, #FFD700 0%, #FF9F40 100%);
+            color: #fff;
+        }
+
+        .course-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 0.95rem;
+        }
+
+        .course-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 6px;
+            background: #e5e5e5;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5D215F 0%, #FF5E0F 100%);
+            border-radius: 3px;
+        }
+
+        .course-icon.design + .course-name + .course-progress .progress-fill {
+            background: linear-gradient(90deg, #5D215F 0%, #7a2e78 100%);
+            width: 75%;
+        }
+
+        .course-icon.html + .course-name + .course-progress .progress-fill {
+            background: linear-gradient(90deg, #FF5E0F 0%, #FF9F40 100%);
+            width: 55%;
+        }
+
+        .course-icon.python + .course-name + .course-progress .progress-fill {
+            background: linear-gradient(90deg, #FFD700 0%, #FF9F40 100%);
+            width: 40%;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* ==================== RIGHT SIDEBAR ==================== */
+        .right-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .upcoming-section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .upcoming-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+        }
+
+        .upcoming-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .upcoming-item {
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 3px solid #5D215F;
+            transition: all 0.25s ease;
+        }
+
+        .upcoming-item:hover {
+            background: #f0f0f0;
+            transform: translateX(2px);
+        }
+
+        .upcoming-item.test {
+            border-left-color: #5D215F;
+        }
+
+        .upcoming-date {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+        }
+
+        .upcoming-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.3rem;
+        }
+
+        .upcoming-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            background: #ffe5e5;
+            color: #E83946;
+            border-radius: 6px;
+        }
+
+        .upcoming-item.test .upcoming-tag {
+            background: #e5e0f0;
+            color: #5D215F;
+        }
+
+        .calendar-section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .calendar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .calendar-day-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #999;
+            padding: 0.5rem 0;
+            text-transform: uppercase;
+        }
+
+        .calendar-day {
+            font-size: 0.85rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            color: #666;
+        }
+
+        .calendar-day:hover {
+            background: #f0f0f0;
+        }
+
+        .calendar-day.active {
+            background: linear-gradient(135deg, #5D215F 0%, #7a2e78 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card,
+        .section,
+        .upcoming-section,
+        .calendar-section {
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1400px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-wrapper {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                display: grid;
+                grid-template-columns: auto 1fr auto auto;
+                align-items: center;
+                padding: 1rem 1.5rem;
+                gap: 2rem;
+            }
+
+            .sidebar-logo {
+                margin-bottom: 0;
+            }
+
+            .sidebar nav ul {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .sidebar-footer {
+                border: none;
+                margin: 0;
+                padding: 0;
+                flex-direction: row;
+                gap: 0.5rem;
+                border-left: 1px solid #e5e5e5;
+                padding-left: 1.5rem;
+            }
+
+            .stats-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .topbar-left {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .search-bar {
+                min-width: 100%;
+                flex: 1;
+            }
+
+            .topbar-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .course-item {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .right-sidebar {
+                gap: 1.5rem;
+            }
+
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                position: static;
+            }
+
+            .sidebar nav ul {
+                flex-direction: column;
+            }
+
+            .sidebar-footer {
+                border-left: none;
+                border-top: 1px solid #e5e5e5;
+                flex-direction: column;
+                padding-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-feather"></i>
+                <span>Quyl.</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="#"><i class="fas fa-list-check"></i> Chapter</a></li>
+                    <li><a href="#"><i class="fas fa-circle-question"></i> Help</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <ul style="list-style: none;">
+                    <li><a href="#" style="text-decoration: none; color: #666; font-size: 0.95rem; font-weight: 500;"><i class="fas fa-circle-question"></i> FAQ</a></li>
+                    <li style="margin-top: 0.5rem;"><a href="#" style="text-decoration: none; color: #666; font-size: 0.95rem; font-weight: 500;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOPBAR -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Dashboard</h1>
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search here...">
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="topbar-icons">
+                        <div class="topbar-icon"><i class="fas fa-comment-dots"></i></div>
+                        <div class="topbar-icon"><i class="fas fa-bell"></i></div>
+                    </div>
+                    <div class="user-profile">
+                        <div class="user-avatar">DP</div>
+                        <div class="user-name">Dipu paul</div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT GRID -->
+            <div class="content-grid">
+                <div>
+                    <!-- STATS CARDS -->
+                    <div class="stats-cards">
+                        <div class="stat-card lessons">
+                            <div class="stat-icon"><i class="fas fa-book"></i></div>
+                            <div class="stat-number">42</div>
+                            <div class="stat-label">Lessons</div>
+                            <div class="stat-subtitle">of 71 completed</div>
+                        </div>
+                        <div class="stat-card assignments">
+                            <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                            <div class="stat-number">08</div>
+                            <div class="stat-label">Assignments</div>
+                            <div class="stat-subtitle">of 24 completed</div>
+                        </div>
+                        <div class="stat-card tests">
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-number">03</div>
+                            <div class="stat-label">Tests</div>
+                            <div class="stat-subtitle">of 15 completed</div>
+                        </div>
+                    </div>
+
+                    <!-- COURSES SECTION -->
+                    <div class="section">
+                        <div class="section-header">
+                            <i class="fas fa-book-open"></i>
+                            <h2 class="section-title">My Courses</h2>
+                        </div>
+                        <div class="section-tabs">
+                            <div class="section-tab active">Active</div>
+                            <div class="section-tab">Completed</div>
+                        </div>
+                        <div class="courses-list">
+                            <div class="course-item">
+                                <div class="course-icon design"><i class="fas fa-palette"></i></div>
+                                <div class="course-name">Web Design: Form Figma to we...</div>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-book-open"></i> 15</span>
+                                    <span><i class="fas fa-tasks"></i> 6</span>
+                                    <span><i class="fas fa-comment"></i> 3</span>
+                                </div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-icon html"><i class="fas fa-code"></i></div>
+                                <div class="course-name">Html Basics</div>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-book-open"></i> 15</span>
+                                    <span><i class="fas fa-tasks"></i> 6</span>
+                                    <span><i class="fas fa-comment"></i> 3</span>
+                                </div>
+                            </div>
+                            <div class="course-item">
+                                <div class="course-icon python"><i class="fas fa-snake"></i></div>
+                                <div class="course-name">Data with python</div>
+                                <div class="course-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="course-meta">
+                                    <span><i class="fas fa-book-open"></i> 15</span>
+                                    <span><i class="fas fa-tasks"></i> 6</span>
+                                    <span><i class="fas fa-comment"></i> 3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDEBAR -->
+                <div class="right-sidebar">
+                    <!-- UPCOMING -->
+                    <div class="upcoming-section">
+                        <h3 class="upcoming-title">Upcoming</h3>
+                        <div class="upcoming-list">
+                            <div class="upcoming-item">
+                                <div class="upcoming-date">29 Sept</div>
+                                <div class="upcoming-name">Practical theory</div>
+                                <span class="upcoming-tag">Assignments</span>
+                            </div>
+                            <div class="upcoming-item">
+                                <div class="upcoming-date">29 Sept</div>
+                                <div class="upcoming-name">Practical theory I</div>
+                                <span class="upcoming-tag test">Test</span>
+                            </div>
+                            <div class="upcoming-item">
+                                <div class="upcoming-date">29 Sept</div>
+                                <div class="upcoming-name">Practical theory 2</div>
+                                <span class="upcoming-tag">Assignments</span>
+                            </div>
+                            <div class="upcoming-item">
+                                <div class="upcoming-date">29 Sept</div>
+                                <div class="upcoming-name">Practical theory 3</div>
+                                <span class="upcoming-tag">Assignments</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CALENDAR -->
+                    <div class="calendar-section">
+                        <h3 class="calendar-title">Status</h3>
+                        <div class="calendar">
+                            <div class="calendar-day-header">Mo</div>
+                            <div class="calendar-day-header">Tu</div>
+                            <div class="calendar-day-header">We</div>
+                            <div class="calendar-day-header">Th</div>
+                            <div class="calendar-day-header">Fr</div>
+                            <div class="calendar-day-header">Sa</div>
+                            <div class="calendar-day-header">Su</div>
+                            
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day">5</div>
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day">12</div>
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day">14</div>
+                            <div class="calendar-day">15</div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                            <div class="calendar-day">18</div>
+                            <div class="calendar-day">19</div>
+                            <div class="calendar-day">20</div>
+                            <div class="calendar-day">21</div>
+                            <div class="calendar-day">22</div>
+                            <div class="calendar-day active">23</div>
+                            <div class="calendar-day">24</div>
+                            <div class="calendar-day">25</div>
+                            <div class="calendar-day">26</div>
+                            <div class="calendar-day active">27</div>
+                            <div class="calendar-day">28</div>
+                            <div class="calendar-day">29</div>
+                            <div class="calendar-day">30</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
