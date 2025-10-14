@@ -36,15 +36,18 @@
         .sidebar-logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: center;
             margin-bottom: 2.5rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1a1a1a;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            position: relative;
+            top: -1cm;
         }
 
-        .sidebar-logo i {
-            font-size: 1.5rem;
+        .sidebar-logo-img {
+            width: 200px;
+            height: auto;
         }
 
         .sidebar nav ul {
