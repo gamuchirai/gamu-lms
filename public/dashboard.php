@@ -25,9 +25,9 @@
                 </ul>
             </nav>
             <div class="sidebar-footer">
-                <ul style="list-style: none;">
-                    <li><a href="#" style="text-decoration: none; color: #666; font-size: 0.95rem; font-weight: 500;"><i class="fas fa-circle-question"></i> FAQ</a></li>
-                    <li style="margin-top: 0.5rem;"><a href="#" style="text-decoration: none; color: #666; font-size: 0.95rem; font-weight: 500;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <ul>
+                    <li><a href="#"><i class="fas fa-circle-question"></i> FAQ</a></li>
+                    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </div>
         </aside>

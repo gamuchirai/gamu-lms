@@ -29,6 +29,8 @@
             height: calc(100vh - 3rem);
             position: sticky;
             top: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar-logo {
@@ -79,11 +81,30 @@
 
         .sidebar-footer {
             border-top: 1px solid #e5e5e5;
-            margin-top: 2rem;
+            margin-top: auto;
             padding-top: 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
+        }
+
+        .sidebar-footer ul li a {
+            color: #666 !important;
+            text-decoration: none !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+            padding: 1rem !important;
+            border-radius: 12px !important;
+            transition: all 0.25s ease !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+        }
+
+        .sidebar-footer ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         /* ==================== MAIN CONTENT ==================== */
