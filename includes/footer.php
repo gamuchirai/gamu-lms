@@ -1,5 +1,5 @@
     <footer>
-        <p>&copy; <?php echo date('Y'); ?> Jupiter LMS</p>
+        <p>&copy; <?php echo date('Y'); ?> Dzidza LMS</p>
     </footer>
 </body>
 </html>
