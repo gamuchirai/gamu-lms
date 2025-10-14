@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row['password'])) {
             $_SESSION['student_id'] = $row['sid'];
             $_SESSION['firstname'] = $row['firstname'];
+            $_SESSION['lastname'] = $row['lastname'];
             $_SESSION['loggedin'] = true;
             header("Location: dashboard.php");
             exit();

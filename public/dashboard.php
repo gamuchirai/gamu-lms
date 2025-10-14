@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/dashboard.css?v=2.0">
-</head>
-<body>
+<?php include '../includes/session_guard.php'; ?>
+<?php include '../includes/header.php'; ?>
     <div class="dashboard-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-logo">
-                <i class="fas fa-feather"></i>
-                <span>Quyl.</span>
+                <img src="./assets/img/Dzidzaa.png" alt="Dzidzaa Logo" class="sidebar-logo-img">
             </div>
             <nav>
                 <ul>
@@ -49,8 +40,8 @@
                         <div class="topbar-icon"><i class="fas fa-bell"></i></div>
                     </div>
                     <div class="user-profile">
-                        <div class="user-avatar">DP</div>
-                        <div class="user-name">Dipu paul</div>
+                        <div class="user-avatar"><?php echo substr($_SESSION['firstname'], 0, 1) . substr($_SESSION['lastname'], 0, 1); ?></div>
+                        <div class="user-name"><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?></div>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
