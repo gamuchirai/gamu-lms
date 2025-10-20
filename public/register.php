@@ -32,7 +32,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $verify_link = "http://localhost:8000/verify_email.php?token=" . $token; 
     $subject = "Verify Your Email - Dzidza LMS"; 
     $message = "Hi $firstname,\n\nPlease verify your account using this code: $token\nor click the link below:\n$verify_link\n\nThank you,\nDzidza LMS"; 
-    @mail($email, $subject, $message);  // Suppress mail warning for local testing
+
+    // Try to send email. If mail() isn't available locally, write the email to a log for testing.
+    $mail_sent = false;
+    try {
+        $mail_sent = @mail($email, $subject, $message);
+    } catch (Exception $e) {
+        $mail_sent = false;
+    }
+
+    // Log the email to logs/email_log.txt for local testing and troubleshooting
+    $log_entry = "[" . date('Y-m-d H:i:s') . "] To: $email | Subject: $subject\n$message\n\n";
+    file_put_contents(__DIR__ . '/../logs/email_log.txt', $log_entry, FILE_APPEND | LOCK_EX);
 
     if ($conn->query($sql) === TRUE) {
         echo "<script>alert('Registration successful! Check your email for verification.'); window.location.href = 'verify_email.php';</script>";

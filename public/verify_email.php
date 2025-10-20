@@ -2,33 +2,55 @@
 require_once '../config/db_config.php';
 
 if (isset($_GET['token'])) {
-    
-    $token = $conn->real_escape_string($_GET['token']);
 
-    // Check if token exists
-    $sql = "SELECT sid, email_verified FROM students WHERE token='$token' LIMIT 1";
-    $result = $conn->query($sql);
+    $token = $_GET['token'];
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        
-        // Check if already verified
-        if ($row['email_verified'] == 1) {
+    // Use prepared statements to prevent SQL injection
+    $stmt = $conn->prepare("SELECT sid, email_verified FROM students WHERE token = ? LIMIT 1");
+    if (! $stmt) {
+        file_put_contents(__DIR__ . '/../logs/email_log.txt', "[".date('Y-m-d H:i:s')."] VERIFY ERROR prepare select: " . $conn->error . "\n", FILE_APPEND | LOCK_EX);
+        echo "<script>alert('Server error. Please try again later.'); window.location='verify_email.php';</script>";
+        exit;
+    }
+    $stmt->bind_param('s', $token);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        // bind result and fetch without using get_result (works without mysqlnd)
+        $stmt->bind_result($sid, $email_verified);
+        $stmt->fetch();
+
+        // If already verified, inform the user
+        if ($email_verified == 1) {
             echo "<script>alert('Email already verified! You can now log in.'); window.location='login.html';</script>";
             exit;
         }
 
-        // Verify the email
-        $update_sql = "UPDATE students SET email_verified=1, token=NULL WHERE token='$token'";
-        
-        if ($conn->query($update_sql) === TRUE) {
+        // Mark email as verified and clear the token
+        $update_stmt = $conn->prepare("UPDATE students SET email_verified = 1, token = NULL WHERE token = ? AND email_verified = 0");
+        if (! $update_stmt) {
+            file_put_contents(__DIR__ . '/../logs/email_log.txt', "[".date('Y-m-d H:i:s')."] VERIFY ERROR prepare update: " . $conn->error . "\n", FILE_APPEND | LOCK_EX);
+            echo "<script>alert('Server error. Please try again later.'); window.location='verify_email.php';</script>";
+            exit;
+        }
+        $update_stmt->bind_param('s', $token);
+        $update_stmt->execute();
+
+        if ($update_stmt->affected_rows > 0) {
             echo "<script>alert('Email verified successfully! You can now log in.'); window.location='login.html';</script>";
+            exit;
         } else {
-            echo "<script>alert('Error verifying email. Please try again.'); window.location='verify_email.php';</script>";
+            // No rows updated: token may be expired or already used; log for debugging
+            file_put_contents(__DIR__ . '/../logs/email_log.txt', "[".date('Y-m-d H:i:s')."] VERIFY WARN no rows updated for token=$token; db_error=" . $conn->error . "\n", FILE_APPEND | LOCK_EX);
+            echo "<script>alert('Invalid or expired verification link.'); window.location='verify_email.php';</script>";
+            exit;
         }
 
     } else {
+        // token not found
         echo "<script>alert('Invalid or expired verification link.'); window.location='verify_email.php';</script>";
+        exit;
     }
 
 } else {

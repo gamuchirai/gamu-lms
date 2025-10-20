@@ -1,0 +1,14 @@
+Email log created on 2025-10-20
+
+[2025-10-20 15:39:13] Resend To: xadonap834@datoinf.com | Subject: Resend Verification - RITA Africa LMS
+Hi trrttr,
+
+Here is your new verification code: 362846
+
+Or click the link below to verify:
+http://localhost:8000/verify_email.php?token=362846
+
+Thank you,
+RITA Africa LMS
+
+[2025-10-20 16:02:51] E2E Created: e2e_1760976170@example.com | Token: 904544 | Link: http://localhost:8000/verify_email.php?token=904544

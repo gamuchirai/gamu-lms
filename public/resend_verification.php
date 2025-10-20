@@ -31,9 +31,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $subject = "Resend Verification - RITA Africa LMS";
             $message = "Hi $firstname,\n\nHere is your new verification code: $newToken\n\nOr click the link below to verify:\n$link\n\nThank you,\nRITA Africa LMS";
 
-            @mail($email, $subject, $message);
+            // Attempt to send; if mail() isn't configured, write to local log for debugging
+            $mail_sent = false;
+            try {
+                $mail_sent = @mail($email, $subject, $message);
+            } catch (Exception $e) {
+                $mail_sent = false;
+            }
 
-            echo "<script>alert('Verification link resent successfully. Check your inbox.'); window.location='verify_email.php';</script>";
+            // Append message to local log so developer can retrieve the token and link
+            $log_entry = "[" . date('Y-m-d H:i:s') . "] Resend To: $email | Subject: $subject\n$message\n\n";
+            file_put_contents(__DIR__ . '/../logs/email_log.txt', $log_entry, FILE_APPEND | LOCK_EX);
+
+            echo "<script>alert('Verification link resent successfully. Check your inbox (or logs/email_log.txt for local testing).'); window.location='verify_email.php';</script>";
         } else {
             echo "<script>alert('Error resending verification. Please try again.'); window.location='verify_email.php';</script>";
         }
