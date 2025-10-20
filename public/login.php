@@ -3,6 +3,7 @@ session_start();
 require_once '../config/db_config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $email = $_POST['email'];
     $password = $_POST['password'];
 
@@ -11,6 +12,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
+
+        if ($row['email_verified'] == 0) {
+            echo "<script>alert('Please verify your email before logging in.');
+            window.location='verify_email.php' ;</script>";
+            exit;
+        }
+
+        if ($row['active'] == 0) {
+            echo "<script>alert('Account suspended. Contact admin.');
+            window.location='login.html' ;</script>";
+            exit;
+        }
+
         if (password_verify($password, $row['password'])) {
             $_SESSION['student_id'] = $row['sid'];
             $_SESSION['firstname'] = $row['firstname'];

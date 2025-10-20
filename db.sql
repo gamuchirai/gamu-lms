@@ -59,11 +59,14 @@ CREATE TABLE `students` (
   `lastname` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified` tinyint(1) DEFAULT '0',
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `active` tinyint(1) DEFAULT '1',
   `gender` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `dob` date NOT NULL,
   PRIMARY KEY (`sid`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +75,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m','Male','1993-09-10');
+INSERT INTO `students` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',0,NULL,1,'Male','1993-09-10'),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,1,'Male','2241-02-10');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -85,4 +88,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-14 19:44:01
+-- Dump completed on 2025-10-20 15:12:26
