@@ -1,43 +1,51 @@
 <?php 
 require_once '../config/db_config.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email'])) {
-    $email = trim($_POST['email']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    $email = $conn->real_escape_string($_POST['email']);
 
-    if (empty($email)) {
-        echo "<script>alert('Please enter a valid email address.'); window.location.href = 'verify_email.php';</script>";
-        exit;
-    }
+    // First, check if email exists and get verification status
+    $check_sql = "SELECT sid, firstname, email_verified FROM students WHERE email='$email' LIMIT 1";
+    $check_result = $conn->query($check_sql);
 
-    $sql = "SELECT * FROM students WHERE email='$email' LIMIT 1";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
+    if ($check_result->num_rows > 0) {
+        $row = $check_result->fetch_assoc();
+        
+        // Check if already verified
         if ($row['email_verified'] == 1) {
-            echo "<script>alert('Email already verified. You can log in.'); window.location.href = 'login.html';</script>";
+            echo "<script>alert('Your email is already verified. Please log in.'); window.location='login.html';</script>";
             exit;
         }
 
+        // Generate new token
         $newToken = random_int(100000, 999999);
-        $update_sql = "UPDATE students SET token='$newToken' WHERE email='$email'";
+        $firstname = $row['firstname'];
 
-        if ($conn->query($update_sql)) {
+        // Update token for this specific email
+        $update_sql = "UPDATE students SET token='$newToken' WHERE email='$email' AND email_verified=0";
+
+        if ($conn->query($update_sql) === TRUE) {
+            // Send verification email
             $link = "http://localhost:8000/verify_email.php?token=$newToken";
-            $subject = "Resend Verification - Dzidza LMS";
-            $message = "Hi, here is your new verification code: $newToken\n\nClick below to verify:\n$link";
+            $subject = "Resend Verification - RITA Africa LMS";
+            $message = "Hi $firstname,\n\nHere is your new verification code: $newToken\n\nOr click the link below to verify:\n$link\n\nThank you,\nRITA Africa LMS";
+
             @mail($email, $subject, $message);
 
-            echo "<script>alert('Verification link resent successfully. Check your inbox.');
-            window.location='verify_email.php' ;</script>";
+            echo "<script>alert('Verification link resent successfully. Check your inbox.'); window.location='verify_email.php';</script>";
         } else {
-            echo "<script>alert('Error updating token. Please try again.'); window.location.href = 'verify_email.php';</script>";
+            echo "<script>alert('Error resending verification. Please try again.'); window.location='verify_email.php';</script>";
         }
+
     } else {
-        echo "<script>alert('Email not found. Please register first.'); window.location.href = 'register.php';</script>";
+        // Email not found in database
+        echo "<script>alert('Email not found. Please register first.'); window.location='register.html';</script>";
     }
+
 } else {
-    echo "<script>alert('Invalid request.'); window.location.href = 'verify_email.php';</script>";
+    // If accessed directly without POST
+    header("Location: verify_email.php");
+    exit;
 }
 ?>
