@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "INSERT INTO students (firstname, lastname, email, password, gender, dob, token, email_verified) VALUES ('$firstname', '$lastname', '$email', '$password', '$gender', '$dob', '$token', 0)"; 
 
-    $verify_link = "http://localhost:8000/verify_email.php?token=" . $token; 
+    $verify_link = "https://gamuchiraikundhlande.eagletechafrica.com/public/verify_email.php?token=" . $token; 
     $subject = "Verify Your Email - Dzidza LMS"; 
     $message = "Hi $firstname,\n\nPlease verify your account using this code: $token\nor click the link below:\n$verify_link\n\nThank you,\nDzidza LMS"; 
 

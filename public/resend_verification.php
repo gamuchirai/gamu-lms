@@ -27,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($conn->query($update_sql) === TRUE) {
             // Send verification email
-            $link = "http://localhost:8000/verify_email.php?token=$newToken";
-            $subject = "Resend Verification - RITA Africa LMS";
-            $message = "Hi $firstname,\n\nHere is your new verification code: $newToken\n\nOr click the link below to verify:\n$link\n\nThank you,\nRITA Africa LMS";
+            $link = "https://gamuchiraikundhlande.eagletechafrica.com/public/verify_email.php?token=$newToken";
+            $subject = "Resend Verification - Dzidza LMS";
+            $message = "Hi $firstname,\n\nHere is your new verification code: $newToken\n\nOr click the link below to verify:\n$link\n\nThank you,\nDzidza LMS";
 
             // Attempt to send; if mail() isn't configured, write to local log for debugging
             $mail_sent = false;

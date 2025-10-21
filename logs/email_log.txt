@@ -6,7 +6,7 @@ Hi trrttr,
 Here is your new verification code: 362846
 
 Or click the link below to verify:
-http://localhost:8000/verify_email.php?token=362846
+https://gamuchiraikundhlande.eagletechafrica.com/verify_email.php?token=362846
 
 Thank you,
 RITA Africa LMS
