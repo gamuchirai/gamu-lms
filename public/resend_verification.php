@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $conn->real_escape_string($_POST['email']);
 
     // First, check if email exists and get verification status
-    $check_sql = "SELECT sid, firstname, email_verified FROM students WHERE email='$email' LIMIT 1";
+    $check_sql = "SELECT id, firstname, email_verified FROM users WHERE email='$email' LIMIT 1";
     $check_result = $conn->query($check_sql);
 
     if ($check_result->num_rows > 0) {
@@ -23,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $firstname = $row['firstname'];
 
         // Update token for this specific email
-        $update_sql = "UPDATE students SET token='$newToken' WHERE email='$email' AND email_verified=0";
+        $update_sql = "UPDATE users SET token='$newToken' WHERE email='$email' AND email_verified=0";
 
         if ($conn->query($update_sql) === TRUE) {
             // Send verification email
-            $link = "https://gamuchiraikundhlande.eagletechafrica.com/public/verify_email.php?token=$newToken";
+            $link = "http://localhost:8000/public/verify_email.php?token=$newToken";
             $subject = "Resend Verification - Dzidza LMS";
             $message = "Hi $firstname,\n\nHere is your new verification code: $newToken\n\nOr click the link below to verify:\n$link\n\nThank you,\nDzidza LMS";
 

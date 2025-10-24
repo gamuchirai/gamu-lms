@@ -264,3 +264,22 @@ For issues, questions, or feedback, please contact:
 ---
 
 **Last Updated**: October 24, 2025
+
+## Starting server
+
+Start the PHP development server from the **root directory** (not from public/):
+
+```bash
+php -S localhost:8000
+```
+
+Then access (both URL formats work):
+- Registration: `http://localhost:8000/public/index.html` or `http://localhost:8000/`
+- Login: `http://localhost:8000/public/login.html` or `http://localhost:8000/login.html`
+- Email Log (for verification tokens): `http://localhost:8000/public/view_email_log.php` or `http://localhost:8000/view_email_log.php`
+
+**Verification URLs work automatically:**
+- Both `http://localhost:8000/verify_email.php?token=XXX` and `http://localhost:8000/public/verify_email.php?token=XXX` work!
+- The root `index.php` handles routing and redirects automatically
+
+**Note:** When you register, check the email log to get your verification link since mail() won't work locally without SMTP configuration. After clicking the verification link, you'll be automatically logged in!

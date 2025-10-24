@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
 
     // Check if email already exists
-    $check_sql = "SELECT sid FROM students WHERE email='$email'";
+    $check_sql = "SELECT sid FROM users WHERE email='$email'";
     $check_result = $conn->query($check_sql);
     if ($check_result->num_rows > 0) {
         echo "<script>alert('Email already registered. Please use a different email or log in.'); window.location.href = 'register.php';</script>";
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "INSERT INTO users (firstname, lastname, email, password, gender, dob, token, email_verified) VALUES ('$firstname', '$lastname', '$email', '$password', '$gender', '$dob', '$token', 0)"; 
 
-    $verify_link = "https://gamuchiraikundhlande.eagletechafrica.com/public/verify_email.php?token=" . $token; 
+    $verify_link = "http://localhost:8000/public/verify_email.php?token=" . $token; 
     $subject = "Verify Your Email - Dzidza LMS"; 
     $message = "Hi $firstname,\n\nPlease verify your account using this code: $token\nor click the link below:\n$verify_link\n\nThank you,\nDzidza LMS"; 
 
