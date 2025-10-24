@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $token = random_int(100000, 999999);
 
-    $sql = "INSERT INTO students (firstname, lastname, email, password, gender, dob, token, email_verified) VALUES ('$firstname', '$lastname', '$email', '$password', '$gender', '$dob', '$token', 0)"; 
+    $sql = "INSERT INTO users (firstname, lastname, email, password, gender, dob, token, email_verified) VALUES ('$firstname', '$lastname', '$email', '$password', '$gender', '$dob', '$token', 0)"; 
 
     $verify_link = "https://gamuchiraikundhlande.eagletechafrica.com/public/verify_email.php?token=" . $token; 
     $subject = "Verify Your Email - Dzidza LMS"; 
