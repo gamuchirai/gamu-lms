@@ -56,52 +56,15 @@ $result = $stmt->get_result();
 $upcoming_tasks = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 ?>
+
     <div class="dashboard-wrapper">
         <!-- SIDEBAR -->
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <img src="./assets/img/Dzidzaa.png" alt="Dzidzaa Logo" class="sidebar-logo-img">
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#" class="active"><i class="fas fa-chart-line"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Courses</a></li>
-                    <li><a href="#"><i class="fas fa-list-check"></i> Chapter</a></li>
-                    <li><a href="#"><i class="fas fa-circle-question"></i> Help</a></li>
-                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <ul>
-                    <li><a href="#"><i class="fas fa-circle-question"></i> FAQ</a></li>
-                    <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                </ul>
-            </div>
-        </aside>
+        <?php include 'sidebar.php'; ?>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
             <!-- TOPBAR -->
-            <div class="topbar">
-                <div class="topbar-left">
-                    <h1>Dashboard</h1>
-                    <div class="search-bar">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search here...">
-                    </div>
-                </div>
-                <div class="topbar-right">
-                    <div class="topbar-icons">
-                        <div class="topbar-icon"><i class="fas fa-comment-dots"></i></div>
-                        <div class="topbar-icon"><i class="fas fa-bell"></i></div>
-                    </div>
-                    <div class="user-profile">
-                        <div class="user-avatar"><?php echo substr($_SESSION['firstname'], 0, 1) . substr($_SESSION['lastname'], 0, 1); ?></div>
-                        <div class="user-name"><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?></div>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-            </div>
+            <?php include 'topbar.php'; ?>
 
             <!-- CONTENT GRID -->
             <div class="content-grid">
