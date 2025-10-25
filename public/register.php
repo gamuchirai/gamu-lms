@@ -1,5 +1,7 @@
 <?php
 require_once '../config/db_config.php';
+// Ensure site constants (BASE_URL, APP_ENV) are available
+require_once __DIR__ . '/../config/site_config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -29,7 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "INSERT INTO users (firstname, lastname, email, password, gender, dob, token, email_verified) VALUES ('$firstname', '$lastname', '$email', '$password', '$gender', '$dob', '$token', 0)"; 
 
-    $verify_link = "http://localhost:8000/public/verify_email.php?token=" . $token; 
+    // Build absolute verify link using BASE_URL from config/site_config.php
+    $verify_link = BASE_URL . 'public/verify_email.php?token=' . $token;
     $subject = "Verify Your Email - Dzidza LMS"; 
     $message = "Hi $firstname,\n\nPlease verify your account using this code: $token\nor click the link below:\n$verify_link\n\nThank you,\nDzidza LMS"; 
 

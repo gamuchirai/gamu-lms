@@ -1,5 +1,7 @@
 <?php 
 require_once '../config/db_config.php';
+// Ensure site constants (BASE_URL, APP_ENV) are available
+require_once __DIR__ . '/../config/site_config.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -27,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($conn->query($update_sql) === TRUE) {
             // Send verification email
-            $link = "http://localhost:8000/public/verify_email.php?token=$newToken";
+            // Build absolute link using BASE_URL
+            $link = BASE_URL . 'public/verify_email.php?token=' . $newToken;
             $subject = "Resend Verification - Dzidza LMS";
             $message = "Hi $firstname,\n\nHere is your new verification code: $newToken\n\nOr click the link below to verify:\n$link\n\nThank you,\nDzidza LMS";
 

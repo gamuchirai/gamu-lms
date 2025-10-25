@@ -22,7 +22,7 @@ $students = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
         <div class="content-grid">
             <div class="manage-students-container">
                 <div class="page-header">
-                    <h2><i class="fas fa-users"></i> Manage Students</h2>
+                    <h2>Manage Students</h2>
                 </div>
 
                 <?php if (count($students) > 0): ?>
@@ -53,22 +53,24 @@ $students = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="action-buttons">
-                                        <button class="btn-action btn-edit" onclick="openEditModal(<?php echo $student['id']; ?>)">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </button>
-                                        <?php if ($student['active']): ?>
-                                        <button class="btn-action btn-suspend" onclick="toggleSuspend(<?php echo $student['id']; ?>, 0)">
-                                            <i class="fas fa-ban"></i> Suspend
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="btn-action btn-activate" onclick="toggleSuspend(<?php echo $student['id']; ?>, 1)">
-                                            <i class="fas fa-check"></i> Activate
-                                        </button>
-                                        <?php endif; ?>
-                                        <button class="btn-action btn-delete" onclick="deleteStudent(<?php echo $student['id']; ?>)">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </button>
+                                    <div class="action-buttons cell-actions">
+                                        <div class="actions-container">
+                                            <button class="btn-action btn-edit action-button" data-tooltip="Edit" aria-label="Edit" onclick="openEditModal(<?php echo $student['id']; ?>)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <?php if ($student['active']): ?>
+                                            <button class="btn-action btn-suspend action-button" data-tooltip="Suspend" aria-label="Suspend" onclick="toggleSuspend(<?php echo $student['id']; ?>, 0)">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                            <?php else: ?>
+                                            <button class="btn-action btn-activate action-button" data-tooltip="Activate" aria-label="Activate" onclick="toggleSuspend(<?php echo $student['id']; ?>, 1)">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <?php endif; ?>
+                                            <button class="btn-action btn-delete action-button" data-tooltip="Delete" aria-label="Delete" onclick="deleteStudent(<?php echo $student['id']; ?>)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -232,28 +234,35 @@ function toggleSuspend(studentId, newStatus) {
                 ? '<span class="status-badge status-active">Active</span>'
                 : '<span class="status-badge status-suspended">Suspended</span>';
             
-            // Update action buttons
-            const editBtn = actionButtons.querySelector('.btn-edit');
-            const deleteBtn = actionButtons.querySelector('.btn-delete');
-            
+            // Rebuild action buttons (icon-only) so they fit the new circular layout
             actionButtons.innerHTML = '';
-            actionButtons.appendChild(editBtn);
-            
-            if (newStatus === 1) {
-                actionButtons.innerHTML += `
-                    <button class="btn-action btn-suspend" onclick="toggleSuspend(${studentId}, 0)">
-                        <i class="fas fa-ban"></i> Suspend
-                    </button>
-                `;
-            } else {
-                actionButtons.innerHTML += `
-                    <button class="btn-action btn-activate" onclick="toggleSuspend(${studentId}, 1)">
-                        <i class="fas fa-check"></i> Activate
-                    </button>
-                `;
-            }
-            
-            actionButtons.appendChild(deleteBtn);
+
+            // Edit button
+            const editBtnNew = document.createElement('button');
+            editBtnNew.className = 'btn-action btn-edit action-button';
+            editBtnNew.setAttribute('data-tooltip', 'Edit');
+            editBtnNew.setAttribute('aria-label', 'Edit');
+            editBtnNew.onclick = function() { openEditModal(studentId); };
+            editBtnNew.innerHTML = '<i class="fas fa-edit"></i>';
+            actionButtons.appendChild(editBtnNew);
+
+            // Suspend / Activate button
+            const statusBtn = document.createElement('button');
+            statusBtn.className = 'btn-action ' + (newStatus === 1 ? 'btn-suspend' : 'btn-activate') + ' action-button';
+            statusBtn.setAttribute('data-tooltip', newStatus === 1 ? 'Suspend' : 'Activate');
+            statusBtn.setAttribute('aria-label', newStatus === 1 ? 'Suspend' : 'Activate');
+            statusBtn.onclick = function() { toggleSuspend(studentId, newStatus === 1 ? 0 : 1); };
+            statusBtn.innerHTML = newStatus === 1 ? '<i class="fas fa-ban"></i>' : '<i class="fas fa-check"></i>';
+            actionButtons.appendChild(statusBtn);
+
+            // Delete button
+            const deleteBtnNew = document.createElement('button');
+            deleteBtnNew.className = 'btn-action btn-delete action-button';
+            deleteBtnNew.setAttribute('data-tooltip', 'Delete');
+            deleteBtnNew.setAttribute('aria-label', 'Delete');
+            deleteBtnNew.onclick = function() { deleteStudent(studentId); };
+            deleteBtnNew.innerHTML = '<i class="fas fa-trash"></i>';
+            actionButtons.appendChild(deleteBtnNew);
             
             alert(`Student ${action}d successfully!`);
         } else {
