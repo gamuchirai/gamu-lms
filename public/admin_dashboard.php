@@ -4,6 +4,8 @@
 // Admin dashboard metrics
 require_once '../config/db_config.php';
 
+include_once __DIR__ . '/../includes/admin_guard.php';
+
 // Total Users
 $sql_users = "SELECT COUNT(*) as total FROM users";
 $result_users = $conn->query($sql_users);

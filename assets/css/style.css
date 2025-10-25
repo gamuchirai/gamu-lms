@@ -161,3 +161,8 @@ footer {
         gap: 0;
     }
 }
+
+/* Utility helpers */
+.hidden {
+    display: none !important;
+}

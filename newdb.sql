@@ -332,7 +332,7 @@ CREATE TABLE `student_tasks` (
 
 LOCK TABLES `student_tasks` WRITE;
 /*!40000 ALTER TABLE `student_tasks` DISABLE KEYS */;
-INSERT INTO `student_tasks` VALUES (1,1,'Practical theory','2025-10-29','assignment',1,'2025-10-14 14:54:55'),(2,1,'Practical theory I','2025-10-29','test',0,'2025-10-14 14:54:55'),(3,1,'Web Design Project','2025-10-25','assignment',1,'2025-10-14 14:54:55'),(4,1,'HTML Quiz','2025-10-20','test',1,'2025-10-14 14:54:55'),(5,1,'Python Data Analysis','2025-11-05','assignment',0,'2025-10-14 14:54:55'),(6,1,'Final Assessment','2025-11-15','test',0,'2025-10-14 14:54:55'),(7,1,'Introduction to Web Design','2025-10-16','lesson',1,'2025-10-14 15:02:13'),(8,1,'CSS Fundamentals','2025-10-18','lesson',1,'2025-10-14 15:02:13'),(9,1,'JavaScript Basics','2025-10-22','lesson',0,'2025-10-14 15:02:13'),(10,1,'Responsive Design','2025-10-28','lesson',1,'2025-10-14 15:02:13'),(11,1,'Python Variables and Data Types','2025-11-01','lesson',0,'2025-10-14 15:02:13'),(12,1,'Python Functions','2025-11-08','lesson',0,'2025-10-14 15:02:13');
+INSERT INTO `student_tasks` VALUES (1,1,'Practical theory','2025-10-29','assignment',1,'2025-10-14 14:54:55'),(2,1,'Practical theory I','2025-10-29','test',0,'2025-10-14 14:54:55'),(3,1,'Web Design Project','2025-10-25','assignment',1,'2025-10-14 14:54:55'),(4,1,'HTML Quiz','2025-10-20','test',1,'2025-10-14 14:54:55'),(5,1,'Python Data Analysis','2025-11-05','assignment',0,'2025-10-14 14:54:55'),(6,1,'Final Assessment','2025-11-15','test',0,'2025-10-14 14:54:55'),(7,1,'Introduction to Web Design','2025-10-16','lesson',1,'2025-10-14 15:02:13'),(8,1,'CSS Fundamentals','2025-10-18','lesson',1,'2025-10-14 15:02:13'),(9,1,'JavaScript Basics','2025-10-22','lesson',0,'2025-10-14 15:02:13'),(10,1,'Responsive Design','2025-10-28','lesson',1,'2025-10-14 15:02:13'),(11,1,'Python Variables and Data Types','2025-11-01','lesson',0,'2025-10-14 15:02:13'),(12,1,'Python Functions','2025-11-08','lesson',1,'2025-10-14 15:02:13');
 /*!40000 ALTER TABLE `student_tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,7 +365,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',0,NULL,1,'Male','1993-09-10'),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,1,'Male','2241-02-10'),(9,'hyyhy','yhyhyb','gamuchiraifaraikundhlande@gmail.com','$2y$12$rHbmRlmzBmXU2psvtKVtCe6csc/1M2afS7d1i5jbublYqMk5xXTGm',0,'249875',1,'Male','2002-12-12'),(10,'trrttr','rtrtt','xadonap834@datoinf.com','$2y$12$ZgvbEH0Ie.6DdnfN6gR.X.76/9AjhoJezRwJ6BCBMGYvRyiGa.WFq',1,NULL,1,'Male','2002-12-12'),(11,'E2E','Tester','e2e_1760976170@example.com','$2y$12$QLSGzsijzdRiF7PZi8VDm.bNNE0QTVpsDX/Aungv6a6L/6VYo9/qO',1,NULL,1,'Other','1990-01-01');
+INSERT INTO `students` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',0,'384289',1,'Male','1993-09-10'),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,1,'Male','2241-02-10'),(9,'hyyhy','yhyhyb','gamuchiraifaraikundhlande@gmail.com','$2y$12$rHbmRlmzBmXU2psvtKVtCe6csc/1M2afS7d1i5jbublYqMk5xXTGm',0,'249875',1,'Male','2002-12-12'),(10,'trrttr','rtrtt','xadonap834@datoinf.com','$2y$12$ZgvbEH0Ie.6DdnfN6gR.X.76/9AjhoJezRwJ6BCBMGYvRyiGa.WFq',1,NULL,1,'Male','2002-12-12'),(11,'E2E','Tester','e2e_1760976170@example.com','$2y$12$QLSGzsijzdRiF7PZi8VDm.bNNE0QTVpsDX/Aungv6a6L/6VYo9/qO',1,NULL,1,'Other','1990-01-01');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -408,12 +408,10 @@ DROP TABLE IF EXISTS `user_roles`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_roles` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
   `role` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `role` (`role`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -422,7 +420,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (1,5,'student'),(2,3,'student'),(3,2,'student'),(4,1,'student'),(5,4,'student');
+INSERT INTO `user_roles` VALUES (2,'admin'),(3,'instructor'),(1,'student');
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -445,6 +443,7 @@ CREATE TABLE `users` (
   `gender` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `dob` date NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `role_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -456,7 +455,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',0,NULL,1,'Male','1993-09-10','2025-10-24 21:48:35'),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,1,'Male','2241-02-10','2025-10-24 21:48:35'),(3,'hyyhy','yhyhyb','gamuchiraifaraikundhlande@gmail.com','$2y$12$rHbmRlmzBmXU2psvtKVtCe6csc/1M2afS7d1i5jbublYqMk5xXTGm',0,'249875',1,'Male','2002-12-12','2025-10-24 21:48:35'),(4,'trrttr','rtrtt','xadonap834@datoinf.com','$2y$12$ZgvbEH0Ie.6DdnfN6gR.X.76/9AjhoJezRwJ6BCBMGYvRyiGa.WFq',1,NULL,1,'Male','2002-12-12','2025-10-24 21:48:35'),(5,'E2E','Tester','e2e_1760976170@example.com','$2y$12$QLSGzsijzdRiF7PZi8VDm.bNNE0QTVpsDX/Aungv6a6L/6VYo9/qO',1,NULL,1,'Other','1990-01-01','2025-10-24 21:48:35');
+INSERT INTO `users` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',1,NULL,1,'Male','1993-09-10','2025-10-24 21:48:35',2),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,1,'Male','2241-02-10','2025-10-24 21:48:35',1),(3,'hyyhy','yhyhyb','gamuchiraifaraikundhlande@gmail.com','$2y$12$rHbmRlmzBmXU2psvtKVtCe6csc/1M2afS7d1i5jbublYqMk5xXTGm',0,'249875',1,'Male','2002-12-12','2025-10-24 21:48:35',1),(4,'trrttr','rtrtt','xadonap834@datoinf.com','$2y$12$ZgvbEH0Ie.6DdnfN6gR.X.76/9AjhoJezRwJ6BCBMGYvRyiGa.WFq',1,NULL,1,'Male','2002-12-12','2025-10-24 21:48:35',1),(5,'E2E','Tester','e2e_1760976170@example.com','$2y$12$QLSGzsijzdRiF7PZi8VDm.bNNE0QTVpsDX/Aungv6a6L/6VYo9/qO',1,NULL,1,'Other','1990-01-01','2025-10-24 21:48:35',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -469,4 +468,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-24 22:56:47
+-- Dump completed on 2025-10-25  2:23:13
