@@ -9,8 +9,12 @@ require_once __DIR__ . '/session_guard.php';
 require_once __DIR__ . '/../config/db_config.php';
 
 $user_id = $_SESSION['user_id'] ?? $_SESSION['id'] ?? $_SESSION['student_id'] ?? null;
-$role = null;
-if ($user_id) {
+
+// Prefer the session-stored role_name when available to avoid extra DB lookups
+$role = $_SESSION['role_name'] ?? null;
+
+// If role_name is not in session, fall back to DB lookup
+if (empty($role) && $user_id) {
     $stmt = $conn->prepare("SELECT ur.role FROM users u LEFT JOIN user_roles ur ON u.role_id = ur.id WHERE u.id = ? LIMIT 1");
     if ($stmt) {
         $stmt->bind_param("i", $user_id);

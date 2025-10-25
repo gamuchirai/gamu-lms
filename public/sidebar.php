@@ -6,17 +6,22 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once '../config/db_config.php';
 
 $user_id = $_SESSION['user_id'] ?? $_SESSION['id'] ?? $_SESSION['student_id'] ?? null;
-$role = null;
-if ($user_id) {
-    // Join users.role_id to user_roles.id
+
+// Prefer session role_name when available
+$role = $_SESSION['role_name'] ?? null;
+
+// Fallback to DB lookup if role not present in session
+if (empty($role) && $user_id) {
     $stmt = $conn->prepare("SELECT ur.role FROM users u LEFT JOIN user_roles ur ON u.role_id = ur.id WHERE u.id = ? LIMIT 1");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $stmt->bind_result($role_result);
-    if ($stmt->fetch()) {
-        $role = $role_result;
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $stmt->bind_result($role_result);
+        if ($stmt->fetch()) {
+            $role = $role_result;
+        }
+        $stmt->close();
     }
-    $stmt->close();
 }
 ?>
 <aside class="sidebar">
