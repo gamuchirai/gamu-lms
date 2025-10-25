@@ -19,10 +19,18 @@ $sql_pending = "SELECT COUNT(*) as total FROM users WHERE email_verified = 0";
 $result_pending = $conn->query($sql_pending);
 $pending_approvals = $result_pending ? $result_pending->fetch_assoc()['total'] : 0;
 
+$sql_activities = "SELECT action as activity, created_at FROM activity_logs ORDER BY created_at DESC LIMIT 5";
+$result_activities = $conn->query($sql_activities);
+$recent_activities = $result_activities ? $result_activities->fetch_all(MYSQLI_ASSOC) : [];
 // Recent Admin Activities (using activity_logs table)
 $sql_activities = "SELECT action as activity, created_at FROM activity_logs ORDER BY created_at DESC LIMIT 5";
 $result_activities = $conn->query($sql_activities);
 $recent_activities = $result_activities ? $result_activities->fetch_all(MYSQLI_ASSOC) : [];
+
+// Recent User Registrations (last 5)
+$sql_recent_users = "SELECT firstname, lastname, email, created_at FROM users ORDER BY created_at DESC LIMIT 5";
+$result_recent_users = $conn->query($sql_recent_users);
+$recent_users = $result_recent_users ? $result_recent_users->fetch_all(MYSQLI_ASSOC) : [];
 ?>
 
     <div class="dashboard-wrapper">
@@ -36,7 +44,7 @@ $recent_activities = $result_activities ? $result_activities->fetch_all(MYSQLI_A
 
             <!-- CONTENT GRID -->
             <div class="content-grid">
-                <div style="flex:2; min-width:0;">
+                <div style="flex:2; min-width:0; display:flex; flex-direction:column;">
                     <!-- ADMIN METRICS CARDS -->
                     <div class="stats-cards">
                         <div class="stat-card users">
@@ -53,6 +61,44 @@ $recent_activities = $result_activities ? $result_activities->fetch_all(MYSQLI_A
                             <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
                             <div class="stat-number"><?php echo $pending_approvals; ?></div>
                             <div class="stat-label">Pending Approvals</div>
+                        </div>
+                    </div>
+
+                    <!-- RECENT USER REGISTRATIONS TABLE -->
+                    <div class="section" style="margin-top:32px;">
+                        <div class="section-header">
+                            <i class="fas fa-user-plus"></i>
+                            <h2 class="section-title">Recent User Registrations</h2>
+                        </div>
+                        <div class="recent-users-table-wrapper">
+                            <table class="recent-users-table" style="width:100%; border-collapse:collapse;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Name</th>
+                                        <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Email</th>
+                                        <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Registered At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (count($recent_users) > 0): ?>
+                                        <?php foreach ($recent_users as $user): ?>
+                                            <tr>
+                                                <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                                                    <?php echo htmlspecialchars($user['firstname'] . ' ' . $user['lastname']); ?>
+                                                </td>
+                                                <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                                                    <?php echo htmlspecialchars($user['email']); ?>
+                                                </td>
+                                                <td style="padding:8px; border-bottom:1px solid #f0f0f0;">
+                                                    <?php echo date('d M Y H:i', strtotime($user['created_at'])); ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr><td colspan="3" style="padding:8px;">No recent registrations.</td></tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
