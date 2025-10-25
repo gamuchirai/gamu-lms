@@ -13,7 +13,7 @@ $result = $conn->query($sql);
 $students = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
 ?>
 
-<link rel="stylesheet" href="assets/css/manage_users.css?v=1.0">
+<link rel="stylesheet" href="../assets/css/table.css?v=1.0">
 
 <div class="dashboard-wrapper">
     <?php include 'sidebar.php'; ?>
