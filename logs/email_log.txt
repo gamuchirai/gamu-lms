@@ -40,3 +40,5 @@ Dzidza LMS
 [2025-10-24 23:32:30] VERIFY SUCCESS token=915612 user_id=1
 [2025-10-24 23:34:13] VERIFY HIT token=915612 ip=::1 uri=/public/verify_email.php?token=915612
 [2025-10-24 23:34:13] VERIFY FAIL token not found: 915612
+[2025-10-28 15:01:58] VERIFY HIT token=249875 ip=::1 uri=/public/verify_email.php?token=249875
+[2025-10-28 15:01:58] VERIFY SUCCESS token=249875 user_id=3

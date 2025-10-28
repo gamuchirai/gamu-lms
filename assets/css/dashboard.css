@@ -12,6 +12,19 @@
             min-height: 100vh;
         }
 
+        /* Role specific theme tweaks */
+        body.role-admin .sidebar nav ul li a:hover,
+        body.role-admin .sidebar nav ul li a.active { background: linear-gradient(135deg,#0ea5a4 0%,#059669 100%); }
+        body.role-admin .topbar { border-left: 6px solid #059669 }
+
+        body.role-instructor .sidebar nav ul li a:hover,
+        body.role-instructor .sidebar nav ul li a.active { background: linear-gradient(135deg,#3b82f6 0%,#6366f1 100%); }
+        body.role-instructor .topbar { border-left: 6px solid #6366f1 }
+
+        body.role-student .sidebar nav ul li a:hover,
+        body.role-student .sidebar nav ul li a.active { background: linear-gradient(135deg,#ff7a59 0%,#ff9f40 100%); }
+        body.role-student .topbar { border-left: 6px solid #ff9f40 }
+
         .dashboard-wrapper {
             display: flex;
             min-height: 100vh;
