@@ -1,5 +1,5 @@
 <?php
-$servername = "eagletechafrica.com";
+$servername = "localhost";
 $username = "u376937047_gamuchirai";
 $password = "qD57E?S&";
 $dbname = "u376937047_gamuchirai_db";
