@@ -51,10 +51,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect based on role_name
             if ($_SESSION['role_name'] === 'admin') {
-                header("Location: admin_dashboard.php");
+                header("Location: /views/admin/dashboard.php");
+                exit();
+            } elseif ($_SESSION['role_name'] === 'instructor') {
+                header("Location: /views/instructor/dashboard.php");
                 exit();
             } else {
-                header("Location: dashboard.php");
+                header("Location: /views/student/dashboard.php");
                 exit();
             }
         } else {

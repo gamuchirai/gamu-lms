@@ -45,14 +45,36 @@ if (isset($_GET['token'])) {
         if ($update_stmt->affected_rows > 0) {
             file_put_contents($logFile, "[".date('Y-m-d H:i:s')."] VERIFY SUCCESS token={$token} user_id={$user_id}\n", FILE_APPEND | LOCK_EX);
             
-            // Auto-login: Set session variables
-            $_SESSION['student_id'] = $user_id;
+            // Auto-login: Set session variables and determine role
+            $_SESSION['user_id'] = $user_id;
             $_SESSION['firstname'] = $firstname;
             $_SESSION['lastname'] = $lastname;
             $_SESSION['loggedin'] = true;
             
-            // Redirect to dashboard
-            echo "<script>alert('Email verified successfully! Welcome, {$firstname}!'); window.location='dashboard.php';</script>";
+            // Get user role to redirect appropriately
+            $role_stmt = $conn->prepare("SELECT ur.role FROM users u LEFT JOIN user_roles ur ON u.role_id = ur.id WHERE u.id = ? LIMIT 1");
+            if ($role_stmt) {
+                $role_stmt->bind_param('i', $user_id);
+                $role_stmt->execute();
+                $role_stmt->bind_result($user_role);
+                if ($role_stmt->fetch()) {
+                    $_SESSION['role_name'] = $user_role ?: 'student';
+                    if ($user_role === 'student') {
+                        $_SESSION['student_id'] = $user_id;
+                    }
+                }
+                $role_stmt->close();
+            }
+            
+            // Redirect based on role
+            $redirect = '/views/student/dashboard.php';
+            if (($_SESSION['role_name'] ?? '') === 'admin') {
+                $redirect = '/views/admin/dashboard.php';
+            } elseif (($_SESSION['role_name'] ?? '') === 'instructor') {
+                $redirect = '/views/instructor/dashboard.php';
+            }
+            
+            echo "<script>alert('Email verified successfully! Welcome, {$firstname}!'); window.location='{$redirect}';</script>";
             exit;
         } else {
             file_put_contents($logFile, "[".date('Y-m-d H:i:s')."] VERIFY WARN no rows updated for token={$token}; db_error=" . $conn->error . "\n", FILE_APPEND | LOCK_EX);

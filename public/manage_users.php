@@ -325,7 +325,7 @@ document.getElementById('editStudentForm').addEventListener('submit', function(e
     e.preventDefault();
     const formData = new FormData(this);
 
-    fetch('api/update_student.php', {
+    fetch('api/users/update_student.php', {
         method: 'POST',
         body: formData
     })
@@ -358,7 +358,7 @@ function toggleSuspend(studentId, newStatus) {
     const action = newStatus === 1 ? 'activate' : 'suspend';
     if (!confirm(`Are you sure you want to ${action} this student?`)) return;
 
-    fetch('api/toggle_student_status.php', {
+    fetch('api/users/toggle_student_status.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `student_id=${studentId}&active=${newStatus}`
@@ -381,7 +381,7 @@ function toggleSuspend(studentId, newStatus) {
 function deleteStudent(studentId) {
     if (!confirm('Are you sure you want to delete this student? This action cannot be undone.')) return;
 
-    fetch('api/delete_student.php', {
+    fetch('api/users/delete_student.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `student_id=${studentId}`
