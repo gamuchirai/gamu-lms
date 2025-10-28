@@ -22,11 +22,21 @@ A comprehensive Learning Management System (LMS) built with PHP and MySQL, desig
   - Multi-role user system (Students, Admins, Instructors)
   - User registration and email verification
   - Password management with secure hashing
+  - Role-based dashboards and navigation
 
 - **Course Management**
-  - Create and manage courses
-  - Organize lessons within courses
+  - Create and manage courses (Admin)
+  - Assign instructors to courses
+  - Organize lessons within courses (Instructor)
   - Track student enrollments
+  - Browse and enroll in courses (Student)
+
+- **Instructor Features** ✨ NEW
+  - Dedicated instructor dashboard
+  - Create and manage lessons with rich content
+  - Create assignments with due dates and descriptions
+  - View assigned courses and student enrollments
+  - Course-specific management interface
 
 - **Assignments & Grades**
   - Create assignments with due dates
@@ -47,6 +57,7 @@ A comprehensive Learning Management System (LMS) built with PHP and MySQL, desig
   - Badge system for achievements
   - Reward student accomplishments
   - Motivate learning progress
+  - Event calendar and scheduling
 
 ## System Requirements
 
@@ -82,7 +93,7 @@ A comprehensive Learning Management System (LMS) built with PHP and MySQL, desig
    mysql -u root -p < newdb.sql
    ```
 
-2. **Run migration queries**
+2. **Run migration queries (optional)**
    ```bash
    mysql -u root -p your_database < migration.sql
    ```
@@ -91,6 +102,62 @@ A comprehensive Learning Management System (LMS) built with PHP and MySQL, desig
    ```sql
    SHOW TABLES;
    ```
+
+## Quick Start
+
+### Testing Locally
+
+1. **Start PHP development server**
+   ```powershell
+   # From project root
+   php -S localhost:8000 -t public
+   ```
+
+2. **Access the application**
+   - Open browser: `http://localhost:8000`
+   - Login page: `http://localhost:8000/login.html`
+
+3. **Test with different roles**
+   
+   **Admin Account:**
+   - Full system access
+   - Manage users, courses, badges, events
+   - Assign instructors to courses
+   - Access: `http://localhost:8000/admin_dashboard.php`
+
+   **Instructor Account:**
+   - View assigned courses
+   - Create and manage lessons
+   - Create assignments with due dates
+   - Access: `http://localhost:8000/instructor_dashboard.php`
+
+   **Student Account:**
+   - Browse and enroll in courses
+   - View lessons and assignments
+   - Track grades and progress
+   - Access: `http://localhost:8000/dashboard.php`
+
+### Key Features to Test
+
+1. **Instructor Course Management**
+   - Login as instructor
+   - Click "My Courses" in sidebar
+   - Select a course and click "Manage"
+   - Try adding lessons and assignments
+
+2. **Student Enrollment**
+   - Login as student
+   - Go to "Courses" page
+   - Click "Enroll Now" on an available course
+   - Verify it shows "Continue Learning" after enrollment
+
+3. **Admin Course Setup**
+   - Login as admin
+   - Go to "Manage Courses"
+   - Create a new course
+   - Assign an instructor from the dropdown
+
+See `IMPLEMENTATION_SUMMARY.md` for detailed testing guide and feature status.
 
 ## Project Structure
 

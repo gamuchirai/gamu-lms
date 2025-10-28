@@ -44,6 +44,39 @@ INSERT INTO `activity_logs` VALUES (1,1,'Logged in','2025-10-24 21:54:36'),(2,2,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `assignment_submissions`
+--
+
+DROP TABLE IF EXISTS `assignment_submissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `assignment_submissions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `assignment_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `file_path` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `submission_text` text COLLATE utf8mb4_unicode_ci,
+  `submitted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('pending','graded','late') COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_submission` (`assignment_id`,`user_id`),
+  KEY `assignment_id` (`assignment_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `assignment_submissions_ibfk_1` FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `assignment_submissions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `assignment_submissions`
+--
+
+LOCK TABLES `assignment_submissions` WRITE;
+/*!40000 ALTER TABLE `assignment_submissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `assignment_submissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `assignments`
 --
 
@@ -100,6 +133,33 @@ INSERT INTO `badges` VALUES (1,'Starter','First login','2025-10-24 21:54:36'),(2
 UNLOCK TABLES;
 
 --
+-- Table structure for table `course_instructors`
+--
+
+DROP TABLE IF EXISTS `course_instructors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `course_instructors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `course_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `assigned_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_course_user` (`course_id`,`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `course_instructors`
+--
+
+LOCK TABLES `course_instructors` WRITE;
+/*!40000 ALTER TABLE `course_instructors` DISABLE KEYS */;
+INSERT INTO `course_instructors` VALUES (1,1,3,'2025-10-28 15:05:25'),(2,3,3,'2025-10-28 15:10:53');
+/*!40000 ALTER TABLE `course_instructors` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `courses`
 --
 
@@ -121,7 +181,7 @@ CREATE TABLE `courses` (
 
 LOCK TABLES `courses` WRITE;
 /*!40000 ALTER TABLE `courses` DISABLE KEYS */;
-INSERT INTO `courses` VALUES (1,'Web Design','Learn HTML, CSS, and JS','2025-10-24 21:54:36'),(2,'Python Programming','Intro to Python','2025-10-24 21:54:36'),(3,'Data Science','Data analysis and visualization','2025-10-24 21:54:36'),(4,'Mathematics','Algebra and Calculus','2025-10-24 21:54:36'),(5,'English Literature','Classic and modern works','2025-10-24 21:54:36');
+INSERT INTO `courses` VALUES (1,'Web Design','Learn HTML, CSS, and JS,php','2025-10-24 21:54:36'),(2,'Python Programming','Intro to Python','2025-10-24 21:54:36'),(3,'Data Science','Data analysis and visualization','2025-10-24 21:54:36'),(4,'Mathematics','Algebra and Calculus','2025-10-24 21:54:36'),(5,'English Literature','Classic and modern works','2025-10-24 21:54:36');
 /*!40000 ALTER TABLE `courses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,12 +260,13 @@ CREATE TABLE `enrollments` (
   `user_id` int NOT NULL,
   `course_id` int NOT NULL,
   `enrolled_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `progress` decimal(5,2) DEFAULT '0.00',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `course_id` (`course_id`),
   CONSTRAINT `enrollments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `enrollments_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,7 +275,7 @@ CREATE TABLE `enrollments` (
 
 LOCK TABLES `enrollments` WRITE;
 /*!40000 ALTER TABLE `enrollments` DISABLE KEYS */;
-INSERT INTO `enrollments` VALUES (1,1,1,'2025-10-24 21:54:36'),(2,1,2,'2025-10-24 21:54:36'),(3,2,1,'2025-10-24 21:54:36'),(4,2,3,'2025-10-24 21:54:36'),(5,1,3,'2025-10-24 21:54:36');
+INSERT INTO `enrollments` VALUES (1,1,1,'2025-10-24 21:54:36',0.00),(2,1,2,'2025-10-24 21:54:36',0.00),(3,2,1,'2025-10-24 21:54:36',0.00),(4,2,3,'2025-10-24 21:54:36',0.00),(5,1,3,'2025-10-24 21:54:36',0.00),(13,4,1,'2025-10-28 15:18:10',0.00);
 /*!40000 ALTER TABLE `enrollments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,6 +318,7 @@ CREATE TABLE `grades` (
   `user_id` int NOT NULL,
   `assignment_id` int NOT NULL,
   `grade` decimal(5,2) DEFAULT NULL,
+  `feedback` text COLLATE utf8mb4_unicode_ci,
   `graded_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -272,8 +334,39 @@ CREATE TABLE `grades` (
 
 LOCK TABLES `grades` WRITE;
 /*!40000 ALTER TABLE `grades` DISABLE KEYS */;
-INSERT INTO `grades` VALUES (1,1,1,85.50,'2025-10-24 21:54:36'),(2,1,2,90.00,'2025-10-24 21:54:36'),(3,2,3,78.00,'2025-10-24 21:54:36'),(4,2,4,88.50,'2025-10-24 21:54:36'),(5,1,5,92.00,'2025-10-24 21:54:36');
+INSERT INTO `grades` VALUES (1,1,1,85.50,NULL,'2025-10-24 21:54:36'),(2,1,2,90.00,NULL,'2025-10-24 21:54:36'),(3,2,3,78.00,NULL,'2025-10-24 21:54:36'),(4,2,4,88.50,NULL,'2025-10-24 21:54:36'),(5,1,5,92.00,NULL,'2025-10-24 21:54:36');
 /*!40000 ALTER TABLE `grades` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `lesson_progress`
+--
+
+DROP TABLE IF EXISTS `lesson_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `lesson_progress` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `lesson_id` int NOT NULL,
+  `completed` tinyint(1) DEFAULT '0',
+  `completed_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_progress` (`user_id`,`lesson_id`),
+  KEY `user_id` (`user_id`),
+  KEY `lesson_id` (`lesson_id`),
+  CONSTRAINT `lesson_progress_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `lesson_progress_ibfk_2` FOREIGN KEY (`lesson_id`) REFERENCES `lessons` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `lesson_progress`
+--
+
+LOCK TABLES `lesson_progress` WRITE;
+/*!40000 ALTER TABLE `lesson_progress` DISABLE KEYS */;
+/*!40000 ALTER TABLE `lesson_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -288,11 +381,12 @@ CREATE TABLE `lessons` (
   `course_id` int NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `content` text COLLATE utf8mb4_unicode_ci,
+  `order_num` int DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `course_id` (`course_id`),
   CONSTRAINT `lessons_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,8 +395,39 @@ CREATE TABLE `lessons` (
 
 LOCK TABLES `lessons` WRITE;
 /*!40000 ALTER TABLE `lessons` DISABLE KEYS */;
-INSERT INTO `lessons` VALUES (1,1,'HTML Basics','Introduction to HTML','2025-10-24 21:54:36'),(2,2,'Python Variables','Understanding variables in Python','2025-10-24 21:54:36'),(3,3,'Data Cleaning','How to clean data','2025-10-24 21:54:36'),(4,4,'Algebra I','Basic algebra concepts','2025-10-24 21:54:36'),(5,5,'Shakespeare','Study of Shakespearean works','2025-10-24 21:54:36');
+INSERT INTO `lessons` VALUES (1,1,'HTML Basics','Introduction to HTML',0,'2025-10-24 21:54:36'),(2,2,'Python Variables','Understanding variables in Python',0,'2025-10-24 21:54:36'),(3,3,'Data Cleaning','How to clean data',0,'2025-10-24 21:54:36'),(4,4,'Algebra I','Basic algebra concepts',0,'2025-10-24 21:54:36'),(5,5,'Shakespeare','Study of Shakespearean works',0,'2025-10-24 21:54:36'),(6,3,'Data Collection','How to collect data',0,'2025-10-28 15:37:06');
 /*!40000 ALTER TABLE `lessons` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` enum('info','success','warning','error') COLLATE utf8mb4_unicode_ci DEFAULT 'info',
+  `read` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `read` (`read`),
+  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -439,6 +564,8 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified` tinyint(1) DEFAULT '0',
   `token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reset_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL,
   `active` tinyint(1) DEFAULT '1',
   `gender` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `dob` date NOT NULL,
@@ -455,7 +582,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Gamuchirai','Kundhlande','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',1,NULL,1,'Male','1993-09-10','2025-10-24 21:48:35',2),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,1,'Male','2241-02-10','2025-10-24 21:48:35',1),(3,'hyyhy','yhyhyb','gamuchiraifaraikundhlande@gmail.com','$2y$12$rHbmRlmzBmXU2psvtKVtCe6csc/1M2afS7d1i5jbublYqMk5xXTGm',0,'249875',1,'Male','2002-12-12','2025-10-24 21:48:35',1),(4,'trrttr','rtrtt','xadonap834@datoinf.com','$2y$12$ZgvbEH0Ie.6DdnfN6gR.X.76/9AjhoJezRwJ6BCBMGYvRyiGa.WFq',1,NULL,1,'Male','2002-12-12','2025-10-24 21:48:35',1),(5,'E2E','Tester','e2e_1760976170@example.com','$2y$12$QLSGzsijzdRiF7PZi8VDm.bNNE0QTVpsDX/Aungv6a6L/6VYo9/qO',1,NULL,1,'Other','1990-01-01','2025-10-24 21:48:35',1);
+INSERT INTO `users` VALUES (1,'admin','test','gkundhlande@gmail.com','$2y$12$n2f2xhUlkHHrSu6sYZkw3.9YVyDrBE2aU3nJGmP6BS1T8/vgvRH4m',1,NULL,NULL,NULL,1,'Male','1993-09-10','2025-10-24 21:48:35',2),(2,'fsfdfad','adfdf','gkundhlande@gmadfail.com','$2y$12$kE/76XhwYf4YeGRaWeV/puBH9LzG6b8yOfl1Q0oGU.7NKzJYm/1t6',0,NULL,NULL,NULL,1,'Male','1995-11-11','2025-10-24 21:48:35',1),(3,'instructor','test','gamuchiraifaraikundhlande@gmail.com','$2y$12$rHbmRlmzBmXU2psvtKVtCe6csc/1M2afS7d1i5jbublYqMk5xXTGm',1,NULL,NULL,NULL,1,'Male','2002-12-12','2025-10-24 21:48:35',3),(4,'Test','Student','xadonap834@datoinf.com','$2y$12$ZgvbEH0Ie.6DdnfN6gR.X.76/9AjhoJezRwJ6BCBMGYvRyiGa.WFq',1,NULL,NULL,NULL,1,'Male','2002-12-12','2025-10-24 21:48:35',1),(5,'E2E','Tester','e2e_1760976170@example.com','$2y$12$QLSGzsijzdRiF7PZi8VDm.bNNE0QTVpsDX/Aungv6a6L/6VYo9/qO',1,NULL,NULL,NULL,0,'Other','1990-01-01','2025-10-24 21:48:35',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -468,4 +595,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-25  2:23:13
+-- Dump completed on 2025-10-28 18:50:22
